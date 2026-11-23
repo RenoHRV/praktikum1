@@ -6,21 +6,21 @@ Multiple authors as well as the full group can be named per task.
 Example: #define AUTHORS_3_A "Tim Heldmann, Lukas Rothenberger"
 */
 
-#define AUTHORS_3_A "Linus Porsch"
-#define AUTHORS_3_B "Ray Schultheis"
+#define AUTHORS_3_A "Linus Porsch, Ray Schultheis, Renato Novak"
+#define AUTHORS_3_B "Linus Porsch, Ray Schultheis, Renato Novak"
 
-#define AUTHORS_4_A ""
-#define AUTHORS_4_B ""
+#define AUTHORS_4_A "Linus Porsch, Ray Schultheis, Renato Novak"
+#define AUTHORS_4_B "Linus Porsch, Ray Schultheis, Renato Novak"
 
-#define AUTHORS_5_A ""
-#define AUTHORS_5_B ""
-#define AUTHORS_5_C ""
-#define AUTHORS_5_D ""
+#define AUTHORS_5_A "Linus Porsch, Ray Schultheis, Renato Novak"
+#define AUTHORS_5_B "Linus Porsch, Ray Schultheis, Renato Novak"
+#define AUTHORS_5_C "Linus Porsch, Ray Schultheis, Renato Novak"
+#define AUTHORS_5_D "Linus Porsch, Ray Schultheis, Renato Novak"
 
-#define AUTHORS_6_A ""
-#define AUTHORS_6_B "gfdgfd"
-#define AUTHORS_6_C ""
-#define AUTHORS_6_D ""
+#define AUTHORS_6_A "Linus Porsch, Ray Schultheis, Renato Novak"
+#define AUTHORS_6_B "Linus Porsch, Ray Schultheis, Renato Novak"
+#define AUTHORS_6_C "Linus Porsch, Ray Schultheis, Renato Novak"
+#define AUTHORS_6_D "Linus Porsch, Ray Schultheis, Renato Novak"
 
-#define AUTHORS_7_A ""
-#define AUTHORS_7_B ""
+#define AUTHORS_7_A "Linus Porsch, Ray Schultheis, Renato Novak"
+#define AUTHORS_7_B "Linus Porsch, Ray Schultheis, Renato Novak"
