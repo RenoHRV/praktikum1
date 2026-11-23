@@ -18,7 +18,7 @@ Example: #define AUTHORS_3_A "Tim Heldmann, Lukas Rothenberger"
 #define AUTHORS_5_D ""
 
 #define AUTHORS_6_A ""
-#define AUTHORS_6_B ""
+#define AUTHORS_6_B "gfdgfd"
 #define AUTHORS_6_C ""
 #define AUTHORS_6_D ""
 
