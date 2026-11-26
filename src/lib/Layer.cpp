@@ -120,14 +120,12 @@ const std::vector<double>& Layer::getDBias() const {
         dBias[i] = dPreActivation[i];
     }
     //update accumulatedDWeights
-    accumulatedDWeights.assign(dWeights.size(), std::vector<double>(dWeights[1].size(), 0.0));
     for (int i = 0; i < accumulatedDWeights.size(); ++i) {
         for (int j = 0; j < accumulatedDWeights[i].size(); ++j) {
             accumulatedDWeights[i][j] += dWeights[i][j];
         }
     }
     //update accumulatedDBias
-    accumulatedDBias.assign(dBias.size(), 0.0);
     for (int i = 0; i < accumulatedDBias.size(); ++i) {
         accumulatedDBias[i] += dBias[i];
     }
@@ -162,22 +160,23 @@ const std::vector<double>& Layer::getDBias() const {
     void Layer::commitToWeights(double learningRate) {
 
     //prepare accumulatedDWeights
+    auto numProcessedSamplesDouble = static_cast<double>(numProcessedSamples);
     for (int i = 0; i < accumulatedDWeights.size(); ++i) {
         for (int j = 0; j < accumulatedDWeights[i].size(); ++j) {
-            accumulatedDWeights[i][j] /= numProcessedSamples;
+            accumulatedDWeights[i][j] /= numProcessedSamplesDouble;
         }
     }
 
     //prepare accumulatedDBias
     for (int i = 0; i < accumulatedDBias.size(); ++i) {
-        accumulatedDBias[i] /= numProcessedSamples;
+        accumulatedDBias[i] /= numProcessedSamplesDouble;
     }
 
     //update params
     updateParameters(accumulatedDWeights, accumulatedDBias, learningRate);
 
     //reset accumulatedDWeights, accumulatedDBias and numProcessedSamples
-    accumulatedDWeights.assign(accumulatedDWeights.size(), std::vector<double>(accumulatedDWeights[1].size(), 0.0));
+    accumulatedDWeights.assign(layerOutputSize, std::vector<double>(layerInputSize, 0.0));
     accumulatedDBias.assign(accumulatedDBias.size(), 0.0);
     numProcessedSamples = 0;
 }
