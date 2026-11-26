@@ -12,16 +12,17 @@ double sum(const std::vector<double>& values);
 // and every other element is 0.0. Throws std::out_of_range if value is negative or >= numClasses.
 std::vector<double> encodeAsOneHot(double value, std::size_t numClasses);
 
-template<typename T> std::vector<double> normalize(const std::vector<T>& values) {
+    template<typename T> std::vector<double> normalize(const std::vector<T>& values, int maxValue) {
+        std::vector<double> result;
+        for (const T& value : values) {
+            result.push_back(static_cast<double>(value) / maxValue);
+        }
+        return result;
+    }
+
+    template<typename T> std::vector<double> normalize(const std::vector<T>& values) {
     const int maxValue = static_cast<int>(*std::max_element(values.begin(), values.end()));
     return normalize(values, maxValue);
 }
+}
 
-template<typename T> std::vector<double> normalize(const std::vector<T>& values, int maxValue) {
-    std::vector<double> result;
-    for (const T& value : values) {
-        result.push_back(static_cast<double>(value) / maxValue);
-    }
-    return result;
-}
-}
