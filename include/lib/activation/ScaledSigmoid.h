@@ -3,6 +3,7 @@
 #include <activation/ActivationFunction.h>
 
 #include <string>
+#include <bits/valarray_after.h>
 #include <cmath>
 #include <iostream>
 
