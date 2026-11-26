@@ -34,6 +34,7 @@ namespace dnn {
         for (std::size_t i = 0; i < n; i++) {
             double p = clampProbability(predictedOutput[i]);
             double value = -(actualOutput[i] / p - (1.0 - actualOutput[i]) / (1.0 - p));
+            value = value / n;
             gradient.push_back(value);
         }
         return gradient;

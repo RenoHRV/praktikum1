@@ -159,17 +159,20 @@ const std::vector<double>& Layer::getDBias() const {
 }
     void Layer::commitToWeights(double learningRate) {
 
+    if (numProcessedSamples == 0) {
+        return;
+    }
+
     //prepare accumulatedDWeights
-    auto numProcessedSamplesDouble = static_cast<double>(numProcessedSamples);
     for (int i = 0; i < accumulatedDWeights.size(); ++i) {
         for (int j = 0; j < accumulatedDWeights[i].size(); ++j) {
-            accumulatedDWeights[i][j] /= numProcessedSamplesDouble;
+            accumulatedDWeights[i][j] /= numProcessedSamples;
         }
     }
 
     //prepare accumulatedDBias
     for (int i = 0; i < accumulatedDBias.size(); ++i) {
-        accumulatedDBias[i] /= numProcessedSamplesDouble;
+        accumulatedDBias[i] /= numProcessedSamples;
     }
 
     //update params
