@@ -4,6 +4,37 @@
 #include <stdexcept>
 
 namespace dnn {
+    
+
+    Network::Network(std::vector<std::tuple<std::vector<std::vector<double>>, std::vector<double>, ActivationFunction*>> layerParameters,
+                 LossFunction* lossFunction)
+    : ownedLossFunction(lossFunction) {
+
+        uint64_t id = 0;
+        for (auto& [weights, bias, activationFunction] : layerParameters) {
+            // Ausgabegröße = Anzahl Zeilen von weights, Eingabegröße = Länge von weights[0]
+            uint64_t outputSize = weights.size();
+            uint64_t inputSize  = weights.empty() ? 0 : weights[0].size();
+
+            Layer* layer = new Layer(id, nextSeed++, inputSize, outputSize, activationFunction);
+            layer->setParameters(std::move(weights), std::move(bias));
+            layers.push_back(layer);
+
+            ++id;
+        }
+    }
+
+
+
+
+    Network::~Network() {
+        for (Layer* layer : layers) {
+            delete layer;
+        }
+        delete ownedLossFunction;
+    }
+
+
 
 void Network::setLossFunction(LossFunction* lossFunction) {
     delete this->ownedLossFunction;
