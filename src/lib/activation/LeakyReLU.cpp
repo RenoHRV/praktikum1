@@ -17,6 +17,6 @@ namespace dnn {
         return 0.01;
     }
     std::string LeakyReLU::getName() const {
-        return "leaky_ru";
+        return "leaky_relu";
     }
 }
