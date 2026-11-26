@@ -14,23 +14,12 @@ namespace dnn {
     public:
         ScaledSigmoid(double min, double max);
 
-        double getMin() const {
-            return min;
-        }
-        double getMax() const {
-            return max;
-        }
+        double getMin() const;
+        double getMax() const;
 
-        double activation(double x) override {
-            return min + (max - min) * (1.0 / (1.0 + std::exp(-x)));
-        }
-        double activationBackwards(double x) override {
-            return (max-min) * (1.0 / (1.0 + std::exp(-x))) * (1.0 - 1.0 / (1.0 + std::exp(-x)));
-        }
-        std::string getName() const override {
-            return "scaled_sigmoid";
-        }
-
+        double activation(double x) override;
+        double activationBackwards(double x) override;
+        std::string getName() const override;
     private:
         double min;
         double max;

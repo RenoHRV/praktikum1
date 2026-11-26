@@ -85,5 +85,98 @@ const std::vector<std::vector<double>>& Layer::getDWeights() const {
 const std::vector<double>& Layer::getDBias() const {
     return dBias;
 }
+    void Layer::forwardPropagation(const std::vector<double>& previousLayerOutput) {
+    preActivationOutput.assign(layerOutputSize, 0.0);
+    activationOutput.assign(layerOutputSize, 0.0);
+    for (int i = 0; i < layerOutputSize; ++i) {
+        double preActivationOutputSum = 0.0;
+        for (int j = 0; j < weights[i].size(); ++j) {
+            preActivationOutputSum += weights[i][j] * previousLayerOutput[j];
+        }
+        preActivationOutput[i] = preActivationOutputSum + bias[i];
+    }
+    for (int i = 0; i < layerOutputSize; ++i) {
+        activationOutput[i] = activationFunction->activation(preActivationOutput[i]);
+    }
+}
+    void Layer::backwardPropagation(const std::vector<double>& dActivationOutput, const std::vector<double>& previousLayerOutput) {
+    //declare vector dPreActivation
+    std::vector<double> dPreActivation;
+    dPreActivation.assign(layerOutputSize, 0.0);
+    //initialize vector dPreActivation
+    for (int i = 0; i < layerOutputSize; ++i) {
+        dPreActivation[i] = dActivationOutput[i] * activationFunction->activationBackwards(preActivationOutput[i]);
+    }
+    //compute dWeights matrix
+    dWeights.assign(layerOutputSize, std::vector<double>(layerInputSize, 0.0));
+    for (int i = 0; i < layerOutputSize; ++i) {
+        for (int j = 0; j < layerInputSize; ++j) {
+            dWeights[i][j] = dPreActivation[i] * previousLayerOutput[j];
+        }
+    }
+    //save computed dPreActivation in dBias
+    dBias.assign(layerOutputSize, 0.0);
+    for (int i = 0; i < dPreActivation.size(); ++i) {
+        dBias[i] = dPreActivation[i];
+    }
+    //update accumulatedDWeights
+    for (int i = 0; i < accumulatedDWeights.size(); ++i) {
+        for (int j = 0; j < accumulatedDWeights[i].size(); ++j) {
+            accumulatedDWeights[i][j] += dWeights[i][j];
+        }
+    }
+    //update accumulatedDBias
+    for (int i = 0; i < accumulatedDBias.size(); ++i) {
+        accumulatedDBias[i] += dBias[i];
+    }
+    //increment numProcessedSamples
+    numProcessedSamples++;
+    //compute dPreviousLayerOutput
+    dPreviousLayerOutput.assign(layerInputSize, 0.0);
+    std::vector<double> weightsColumn(weights.size());
+    for (int j = 0; j < layerInputSize; ++j) {
+        for (int i = 0; i < weights.size(); ++i) {
+            weightsColumn[i] = weights[i][j];
+        }
+        double sum = 0.0;
+        for (int k = 0; k < weightsColumn.size(); ++k) {
+            sum += weightsColumn[k] * dPreActivation[k];
+        }
+        dPreviousLayerOutput[j] = sum;
+    }
+}
+    void Layer::updateParameters(const std::vector<std::vector<double>>& dWeights, const std::vector<double>& dBias, double learningRate) {
+    //update weights
+    for (int i = 0; i < weights.size(); ++i) {
+        for (int j = 0; j < weights[i].size(); ++j) {
+            weights[i][j] -= learningRate * dWeights[i][j];
+        }
+    }
+    //update bias
+    for (int i = 0; i < bias.size(); ++i) {
+        bias[i] -= learningRate * dBias[i];
+    }
+}
+    void Layer::commitToWeights(double learningRate) {
 
+    //prepare accumulatedDWeights
+    for (int i = 0; i < accumulatedDWeights.size(); ++i) {
+        for (int j = 0; j < accumulatedDWeights[i].size(); ++j) {
+            accumulatedDWeights[i][j] /= numProcessedSamples;
+        }
+    }
+
+    //prepare accumulatedDBias
+    for (int i = 0; i < accumulatedDBias.size(); ++i) {
+        accumulatedDBias[i] /= numProcessedSamples;
+    }
+
+    //update params
+    updateParameters(accumulatedDWeights, accumulatedDBias, learningRate);
+
+    //reset accumulatedDWeights, accumulatedDBias and numProcessedSamples
+    accumulatedDWeights.assign(accumulatedDWeights.size(), std::vector<double>(accumulatedDWeights[1].size(), 0.0));
+    accumulatedDBias.assign(accumulatedDBias.size(), 0.0);
+    numProcessedSamples = 0;
+}
 }
